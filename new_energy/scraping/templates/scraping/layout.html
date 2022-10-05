@@ -1,0 +1,14 @@
+{% load static %}
+<html>
+    <head><title>Scraping</title></head>
+    <link rel="stylesheet" href="{% static 'scraping/styles.css' %}" />
+    <body>
+        
+        <nav>
+            <a href="{% url 'launcher' %}">Launcher</a>
+        </nav>
+
+        {% block content %}{% endblock %}
+
+    </body>
+</html>
