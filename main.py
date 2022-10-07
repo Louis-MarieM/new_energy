@@ -10,8 +10,6 @@ identifiant = "0107303952_facturation"
 pwd = "gBhnGurgJX"
 
 
-
-
 def energy_login():
     global wait, browser, Link
 
