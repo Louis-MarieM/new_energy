@@ -8,7 +8,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from scraping.forms import LoginForm
 
 def launcher(request):
-    form = LoginForm()
     if request.method == 'POST':
         global wait, browser, Link
         form = LoginForm(request.POST)

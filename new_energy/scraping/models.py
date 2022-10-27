@@ -6,11 +6,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 class Bot(models.Model):
-    name = models.fields.CharField()
+    name = models.fields.CharField(max_length=100)
 
     def launch():
         browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
         wait = WebDriverWait(browser, 600)
         return browser
-    
-    def login():
