@@ -12,6 +12,9 @@ def launcher(request):
         global wait, browser, Link
         form = LoginForm(request.POST)
         if form.is_valid():
+            options = webdriver.ChromeOptions()
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
             browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
             wait = WebDriverWait(browser, 600)
             print("URL: ",form.cleaned_data['website'])
