@@ -15,7 +15,7 @@ def launcher(request):
             options = webdriver.ChromeOptions()
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
-            browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+            browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
             wait = WebDriverWait(browser, 600)
             print("URL: ",form.cleaned_data['website'])
             browser.get(form.cleaned_data['website'])
