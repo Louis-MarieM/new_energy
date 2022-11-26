@@ -15,9 +15,7 @@ def launcher(request):
         
         if form.is_valid():
             if (totalEnergies.energy_login(form.cleaned_data['identifier'], form.cleaned_data['password'], form.cleaned_data['website'])):
-                return render(request, 'scraping/launcher.html', {'form': form})
-            else:
-                form = LoginForm()
+                return render(request, 'scraping/succes.html')
     else :
         form = LoginForm()
     return render(request, 'scraping/launcher.html', {'form': form})
