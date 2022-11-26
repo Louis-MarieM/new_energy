@@ -44,6 +44,7 @@ class FournisseurTotalEnergies:
 
         except Exception as e:
             return False
+        return True
 
 
 
