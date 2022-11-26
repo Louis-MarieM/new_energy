@@ -16,7 +16,7 @@ class FournisseurTotalEnergies:
             options.add_argument("--disable-dev-shm-usage")
             options.add_argument("--headless")
             options.add_argument("--disable-gpu")
-            browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+            browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
             wait = WebDriverWait(browser, 600)
             browser.get(website)
 
