@@ -5,8 +5,9 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
-class Bot(models.Model):
+class Facture(models.Model):
     name = models.fields.CharField(max_length=100)
+    path = models.fields.CharField(max_length=100)
 
     def launch():
         browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
