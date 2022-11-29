@@ -20,4 +20,5 @@ from scraping import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('launcher/', views.launcher, name='launcher'),
+    path('api/test_identifiants/', views.FactureView.as_view())
 ]
