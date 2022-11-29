@@ -7,7 +7,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 class FournisseurTotalEnergies:
 
-    def energy_login(identifiant, pwd, website):
+    def energy_login(provider, username, password):
         global wait, browser, Link
         try:
             # Options pour permettre l'utilisation du driver sur le serveur.
@@ -18,7 +18,7 @@ class FournisseurTotalEnergies:
             options.add_argument("--disable-gpu")
             browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
             wait = WebDriverWait(browser, 600)
-            browser.get(website)
+            browser.get(provider)
 
             try:
                 time.sleep(2)
@@ -27,10 +27,10 @@ class FournisseurTotalEnergies:
                 input_submit = browser.find_element("xpath", '//*[@id="tx_deauthentification_mdp_oublie"]')
 
                 input_identifiant.click()
-                input_identifiant.send_keys(identifiant)
+                input_identifiant.send_keys(username)
                 time.sleep(1)
                 input_pwd.click()
-                input_pwd.send_keys(pwd)
+                input_pwd.send_keys(password)
                 time.sleep(1)
                 input_submit.click()
 
