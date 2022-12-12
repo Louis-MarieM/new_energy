@@ -6,5 +6,5 @@ class LoginForm(forms.Form):
     password = forms.CharField(initial="gBhnGurgJX")
     # Champ vide.
     Choices = [("", "----------")]
-    Choices += cst.FOURNISSEURS
+    Choices += [("total energies", cst.FOURNISSEURS["totalenergies"])]
     website = forms.ChoiceField(choices=Choices, required=True)
