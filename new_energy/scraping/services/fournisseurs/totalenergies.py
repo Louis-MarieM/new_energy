@@ -6,10 +6,11 @@ from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
 
 from scraping.services.constantes.constantes import Constantes as const
+from scraping.models import User
 
 class FournisseurTotalEnergies:
 
-    def energy_login(provider, username, password):
+    def energy_login(provider, user):
         global wait, browser, Link
         try:
             # On récupère le libellé du fournisseur.
@@ -17,16 +18,16 @@ class FournisseurTotalEnergies:
             key_list = list(const.FOURNISSEURS.keys())
             val_list = list(const.FOURNISSEURS.values())
             position = val_list.index(provider)
-            folderName = key_list[position] + username + password
-            if not os.path.exists(folderName):
-                os.mkdir(folderName)
+            folderPath = user.getDownloadFolder(provider)
+            if not os.path.exists(folderPath):
+                os.mkdir(folderPath)
             # Options pour permettre l'utilisation du driver sur le serveur.
             options = webdriver.ChromeOptions()
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
             options.add_argument("--headless")
             options.add_argument("--disable-gpu")
-            prefs = {"download.default_directory":const.DOWNLOAD_PATH + folderName}
+            prefs = {"download.default_directory":folderPath}
             options.add_experimental_option("prefs", prefs)
             browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
             wait = WebDriverWait(browser, 600)
@@ -39,23 +40,23 @@ class FournisseurTotalEnergies:
                 input_submit = browser.find_element("xpath", '//*[@id="tx_deauthentification_mdp_oublie"]')
 
                 input_identifiant.click()
-                input_identifiant.send_keys(username)
+                input_identifiant.send_keys(user.getUsername())
                 time.sleep(1)
                 input_pwd.click()
-                input_pwd.send_keys(password)
+                input_pwd.send_keys(user.getPassword())
                 time.sleep(1)
                 input_submit.click()
 
                 try:
                     button_factures = browser.find_element("xpath", '//*[@id="header"]/div[4]/div/ul/li[2]/a')
                 except NoSuchElementException:
-                    return e
+                    return False
                 
             except Exception as e:
-                return e
+                return False
 
         except Exception as e:
-            return e
+            return False
         return True
 
 
@@ -75,7 +76,7 @@ class FournisseurTotalEnergies:
             local_pages = int(nb_pages.text)
             print("Nombre de pages détectées : ", str(local_pages))
         except Exception as e:
-            return e
+            return False
 
         try:
             #on scroll toutes les pages où il y a des factures
@@ -92,6 +93,6 @@ class FournisseurTotalEnergies:
                 next_button.click()
                 return True
         except Exception as e:
-            return e
+            return False
         return True
 
