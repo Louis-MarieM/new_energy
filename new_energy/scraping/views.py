@@ -57,7 +57,7 @@ class FactureView(APIView) :
             provider = const.FOURNISSEURS[self.request.GET.get("provider")]
             user.setUsername(self.request.GET.get("username"))
             user.setPassword(self.request.GET.get("password"))
-            totalEnergies.energy_login(provider, user.getUsername(), user.getPassword())
+            totalEnergies.energy_login(provider, user)
             totalEnergies.access_factures()
             success = totalEnergies.download_factures()
         except Exception as e :
