@@ -29,18 +29,17 @@ class UserView(APIView) :
     def get(self, *args, **kwargs) :
         success = False
         provider = ""
-        username = ""
-        password = ""
+        user = User("", "")
         try:
             provider = const.FOURNISSEURS[self.request.GET.get("provider")]
-            username = self.request.GET.get("username")
-            password = self.request.GET.get("password")
-            success = totalEnergies.energy_login(provider, username, password)
+            user.setUsername(self.request.GET.get("username"))
+            user.setPassword(self.request.GET.get("password"))
+            success = totalEnergies.energy_login(provider, user)
             return Response({
                     "success" : success,
                     "provider" : self.request.GET.get("provider"),
-                    "username" : username,
-                    "password" : password,
+                    "username" : user.getUsername(),
+                    "password" : user.getPassword()
                 })
         except Exception as e :
             return Response({'error' : e.args})
