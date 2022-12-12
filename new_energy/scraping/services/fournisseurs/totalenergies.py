@@ -1,21 +1,33 @@
-import time
+import time, os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
 
+from scraping.services.constantes.constantes import Constantes as const
+
 class FournisseurTotalEnergies:
 
     def energy_login(provider, username, password):
         global wait, browser, Link
         try:
+            # On récupère le libellé du fournisseur.
+            # Puis on créer un dossier unique par fournisseur par utilisateur où les factures seront téléchargées.
+            key_list = list(const.FOURNISSEURS.keys())
+            val_list = list(const.FOURNISSEURS.values())
+            position = val_list.index(provider)
+            folderName = key_list[position] + username + password
+            if not os.path.exists(folderName):
+                os.mkdir(folderName)
             # Options pour permettre l'utilisation du driver sur le serveur.
             options = webdriver.ChromeOptions()
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
             options.add_argument("--headless")
             options.add_argument("--disable-gpu")
+            prefs = {"download.default_directory":const.DOWNLOAD_PATH + folderName}
+            options.add_experimental_option("prefs", prefs)
             browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
             wait = WebDriverWait(browser, 600)
             browser.get(provider)
@@ -37,13 +49,13 @@ class FournisseurTotalEnergies:
                 try:
                     button_factures = browser.find_element("xpath", '//*[@id="header"]/div[4]/div/ul/li[2]/a')
                 except NoSuchElementException:
-                    return False
+                    return e
                 
             except Exception as e:
-                return False
+                return e
 
         except Exception as e:
-            return False
+            return e
         return True
 
 
@@ -63,7 +75,7 @@ class FournisseurTotalEnergies:
             local_pages = int(nb_pages.text)
             print("Nombre de pages détectées : ", str(local_pages))
         except Exception as e:
-            print(e)
+            return e
 
         try:
             #on scroll toutes les pages où il y a des factures
@@ -78,6 +90,8 @@ class FournisseurTotalEnergies:
                 print(">>> Page "+str(i)+" téléchargée")
                 next_button = browser.find_element("xpath", '//*[@id="table_facture_next"]')
                 next_button.click()
+                return True
         except Exception as e:
-            print(e)
+            return e
+        return True
 
