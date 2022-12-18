@@ -10,15 +10,11 @@ from scraping.models import User
 
 class FournisseurTotalEnergies:
 
-    def energy_login(provider, user):
+    def energy_login(provider, user, processId):
         global wait, browser, Link
         try:
-            # On récupère le libellé du fournisseur.
-            # Puis on créer un dossier unique par fournisseur par utilisateur où les factures seront téléchargées.
-            key_list = list(const.FOURNISSEURS.keys())
-            val_list = list(const.FOURNISSEURS.values())
-            position = val_list.index(provider)
-            folderPath = user.getDownloadFolder(provider)
+            # On créer un dossier unique par fournisseur par utilisateur où les factures seront téléchargées.
+            folderPath = user.getDownloadFolder(processId)
             if not os.path.exists(folderPath):
                 os.mkdir(folderPath)
             # Options pour permettre l'utilisation du driver sur le serveur.
@@ -34,7 +30,7 @@ class FournisseurTotalEnergies:
             browser.get(provider)
 
             try:
-                time.sleep(2)
+                time.sleep(1)
                 input_identifiant = browser.find_element("xpath", '//*[@id="tx_deauthentification_login"]')
                 input_pwd = browser.find_element("xpath", '//*[@id="tx_deauthentification_password"]')
                 input_submit = browser.find_element("xpath", '//*[@id="tx_deauthentification_mdp_oublie"]')
@@ -70,29 +66,30 @@ class FournisseurTotalEnergies:
 
     def download_factures():
         try:
-            time.sleep(5)
+            time.sleep(2)
             nb_pages = browser.find_element("xpath", '// *[ @ id = "table_facture_paginate"] / span / a[6]')
             # on transforme le nombre de pages en nombre pour pouvoir le loop
             local_pages = int(nb_pages.text)
             print("Nombre de pages détectées : ", str(local_pages))
         except Exception as e:
+            print(str(e))
             return False
 
         try:
             #on scroll toutes les pages où il y a des factures
             for i in range(1,local_pages):
-                time.sleep(4)
                 #on scroll les 10 factures sur chaque page
                 for y in range(1,11):
                     time.sleep(1)
                     download_bill = browser.find_element("xpath", '//*[@id="table_facture"]/tbody/tr['+str(y)+']/td[8]/a')
                     download_bill.click()
-                time.sleep(2)
+                time.sleep(1)
                 print(">>> Page "+str(i)+" téléchargée")
                 next_button = browser.find_element("xpath", '//*[@id="table_facture_next"]')
                 next_button.click()
                 return True
         except Exception as e:
+            print("Erreur2")
             return False
         return True
 

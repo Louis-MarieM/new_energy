@@ -33,10 +33,6 @@ class User():
     def setPassword(self, password):
         self.password = password
 
-    # Pour chaque utilisateur, il y a un dossier de téléchargement par fournisseur.
-    def getDownloadFolder(self, provider):
-            key_list = list(const.FOURNISSEURS.keys())
-            val_list = list(const.FOURNISSEURS.values())
-            position = val_list.index(provider)
-            folderName = key_list[position] + self.username + self.password
-            return const.DOWNLOAD_PATH + folderName
+    # Pour chaque utilisateur, il y a un dossier de téléchargement par fournisseur, dont le nom est donné par Bubble.
+    def getDownloadFolder(self, processId):
+            return const.DOWNLOAD_PATH + processId
