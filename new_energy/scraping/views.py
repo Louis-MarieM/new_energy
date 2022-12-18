@@ -29,15 +29,21 @@ class UserView(APIView) :
     def get(self, *args, **kwargs) :
         success = False
         provider = ""
+        processId = ""
+        jobId = ""
         user = User("", "")
         try:
             provider = const.FOURNISSEURS[self.request.GET.get("provider")]
+            processId = self.request.GET.get("processId")
+            jobId = self.request.GET.get("jobId")
             user.setUsername(self.request.GET.get("username"))
             user.setPassword(self.request.GET.get("password"))
-            success = totalEnergies.energy_login(provider, user)
+            success = totalEnergies.energy_login(provider, user, processId)
             return Response({
                     "success" : success,
                     "provider" : self.request.GET.get("provider"),
+                    "processId" : processId,
+                    "jobId" : jobId,
                     "username" : user.getUsername(),
                     "password" : user.getPassword()
                 })
@@ -50,25 +56,32 @@ class FactureView(APIView) :
         success = False
         message = ""
         provider = ""
+        processId = ""
+        jobId = ""
         user = User("", "")
         filenames = ""
         try :
-            provider = const.FOURNISSEURS[self.request.GET.get("provider")]
+            provider = self.request.GET.get("provider")
+            providerWebsite = const.FOURNISSEURS[provider]
+            processId = self.request.GET.get("processId")
+            jobId = self.request.GET.get("jobId")
             user.setUsername(self.request.GET.get("username"))
             user.setPassword(self.request.GET.get("password"))
-            totalEnergies.energy_login(provider, user)
+            totalEnergies.energy_login(providerWebsite, user, processId)
             totalEnergies.access_factures()
             success = totalEnergies.download_factures()
         except Exception as e :
             message = e
         if success:
-            folderName = user.getDownloadFolder(provider)
+            folderName = user.getDownloadFolder(processId)
             filenames = os.listdir(folderName)
         return Response({
                 "success" : success,
                 "message" : message,
                 "filenames" : filenames,
                 "provider" : provider,
+                "processId" : processId,
+                "jobId" : jobId,
                 "username" : user.getUsername(),
                 "password" : user.getPassword()
             })
