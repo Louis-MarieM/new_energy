@@ -1,9 +1,11 @@
-import time, os
+import time, os, shutil
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
+from PyPDF2 import PdfFileWriter, PdfFileReader
+from pathlib import Path
 
 from scraping.services.constantes.constantes import Constantes as const
 from scraping.models import User
@@ -93,3 +95,25 @@ class FournisseurTotalEnergies:
             return False
         return True
 
+    def decoupage(user, processId):
+        directory = user.getDownloadFolder(processId)
+        outputFolderPath = user.getDecoupageFolder(processId)
+        if not os.path.exists(outputFolderPath):
+            os.mkdir(outputFolderPath)
+        for file in os.listdir(directory):
+            if not file.endswith(".pdf"):
+                continue
+            with open(os.path.join(directory,file), 'rb') as pdfFileObj:  # Changes here
+                pdfReader = PdfFileReader(pdfFileObj)
+                if pdfReader.numPages<3:
+                    shutil.copyfile(os.path.join(directory,file), outputFolderPath + file)
+                else:
+                    for i in range(1, pdfReader.numPages - 1):
+                        output = PdfFileWriter()
+                        output.addPage(pdfReader.getPage(0))
+                        output.addPage(pdfReader.getPage(i + 1))
+
+                        export_filename = '{} - {}.pdf'.format(os.path.splitext(file)[0], i)
+                        with open(outputFolderPath + export_filename, "wb") as outputStream:
+                            output.write(outputStream)
+        return True
