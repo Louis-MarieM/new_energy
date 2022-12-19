@@ -33,6 +33,10 @@ class User():
     def setPassword(self, password):
         self.password = password
 
-    # Pour chaque utilisateur, il y a un dossier de téléchargement par fournisseur, dont le nom est donné par Bubble.
+    # Pour chaque utilisateur, il y a un dossier de téléchargement par fournisseur, dont le nom est donné lors de l'appel.
     def getDownloadFolder(self, processId):
-            return const.DOWNLOAD_PATH + processId
+        return const.DOWNLOAD_PATH + processId
+    
+    # Pour chaque utilisateur, il y a un dossier output de découpage par fournisseur, dont le nom est donné lors de l'appel.
+    def getDecoupageFolder(self, processId):
+        return const.OUTPUT_DECOUPAGE_PATH + processId + '_cut\\'

@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('launcher/', views.launcher, name='launcher'),
     path('api/test_identifiants/', views.UserView.as_view()),
-    path('api/scrap/', views.FactureView.as_view()),
+    path('api/factures/', views.FactureView.as_view()),
 ]

@@ -71,7 +71,7 @@ class FactureView(APIView) :
             totalEnergies.access_factures()
             success = totalEnergies.download_factures()
         except Exception as e :
-            message = e
+            message = str(e)
         if success:
             folderName = user.getDownloadFolder(processId)
             filenames = os.listdir(folderName)
@@ -86,3 +86,29 @@ class FactureView(APIView) :
                 "password" : user.getPassword()
             })
             
+    def put(self, *args, **kwargs) :
+        success = False
+        message = ""
+        provider = ""
+        processId = ""
+        jobId = ""
+        user = User("", "")
+        filenames = ""
+        try:
+            provider = self.request.GET.get("provider")
+            processId = self.request.GET.get("processId")
+            jobId = self.request.GET.get("jobId")
+            success = totalEnergies.decoupage(user, processId)
+        except Exception as e :
+            message = str(e)
+        if success:
+            folderName = user.getDecoupageFolder(processId)
+            filenames = os.listdir(folderName)
+        return Response({
+            "success" : success,
+            "message" : message,
+            "filenames" : filenames,
+            "provider" : provider,
+            "processId" : processId,
+            "jobId" : jobId
+        })

@@ -5,3 +5,4 @@ class Constantes:
     
     # Lieu de réception des fichiers téléchargés
     DOWNLOAD_PATH = "C:\\Users\\Hélème\\Downloads\\"
+    OUTPUT_DECOUPAGE_PATH = "C:\\Users\\Hélème\\Downloads\\"
