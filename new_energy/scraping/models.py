@@ -10,11 +10,6 @@ class Facture(models.Model):
     name = models.fields.CharField(max_length=100)
     path = models.fields.CharField(max_length=100)
 
-    def launch():
-        browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-        wait = WebDriverWait(browser, 600)
-        return browser
-
 class User():
 
     def __init__(self, username, password):
@@ -35,7 +30,7 @@ class User():
 
     # Pour chaque utilisateur, il y a un dossier de téléchargement par fournisseur, dont le nom est donné lors de l'appel.
     def getDownloadFolder(self, processId):
-        return const.DOWNLOAD_PATH + processId
+        return const.DOWNLOAD_PATH + processId + "\\"
     
     # Pour chaque utilisateur, il y a un dossier output de découpage par fournisseur, dont le nom est donné lors de l'appel.
     def getDecoupageFolder(self, processId):

@@ -28,6 +28,29 @@ class UserView(APIView) :
 
     def get(self, *args, **kwargs) :
         success = False
+        message = ""
+        processId = ""
+        filenames = []
+        user = User("", "")
+        try:
+            processId = self.request.GET.get("processId")
+            folderPath = user.getDownloadFolder(processId)
+            print(folderPath)
+            if os.path.exists(folderPath):
+                filenames = os.listdir(folderPath)
+        except Exception as e :
+            message = str(e)
+        return Response({
+            "success" : success,
+            "message" : message,
+            "provider" : self.request.GET.get("provider"),
+            "processId" : processId,
+            "jobId" : self.request.GET.get("jobId"),
+            "filenames" : filenames
+        })
+
+    def put(self, *args, **kwargs) :
+        success = False
         provider = ""
         processId = ""
         jobId = ""
@@ -35,7 +58,6 @@ class UserView(APIView) :
         try:
             provider = const.FOURNISSEURS[self.request.GET.get("provider")]
             processId = self.request.GET.get("processId")
-            jobId = self.request.GET.get("jobId")
             user.setUsername(self.request.GET.get("username"))
             user.setPassword(self.request.GET.get("password"))
             success = totalEnergies.energy_login(provider, user, processId)
@@ -43,12 +65,12 @@ class UserView(APIView) :
                     "success" : success,
                     "provider" : self.request.GET.get("provider"),
                     "processId" : processId,
-                    "jobId" : jobId,
+                    "jobId" : self.request.GET.get("jobId"),
                     "username" : user.getUsername(),
                     "password" : user.getPassword()
                 })
         except Exception as e :
-            return Response({'error' : e.args})
+            return Response({'error' : str(e)})
 
 class FactureView(APIView) : 
 

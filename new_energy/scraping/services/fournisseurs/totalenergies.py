@@ -12,6 +12,7 @@ from scraping.models import User
 
 class FournisseurTotalEnergies:
 
+    # provider : url du fournisseur
     def energy_login(provider, user, processId):
         global wait, browser, Link
         try:
