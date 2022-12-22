@@ -5,10 +5,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
 from PyPDF2 import PdfFileWriter, PdfFileReader
-from pathlib import Path
-
-from scraping.services.constantes.constantes import Constantes as const
-from scraping.models import User
 
 class FournisseurTotalEnergies:
 
