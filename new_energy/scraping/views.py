@@ -8,21 +8,6 @@ from scraping.services.fournisseurs.totalenergies import FournisseurTotalEnergie
 from scraping.services.constantes.constantes import Constantes as const
 from scraping.models import User
 
-def launcher(request):
-    if request.method == 'POST':
-        global wait, browser, Link
-        form = LoginForm(request.POST)
-        
-        if form.is_valid():
-            print("Les logs sont : " + form.cleaned_data['website'], form.cleaned_data['identifier'], form.cleaned_data['password'])
-            totalEnergies.energy_login("https://clientsgc.totalenergies.fr/connexion-clients-collectivites/", form.cleaned_data['identifier'], form.cleaned_data['password'])
-            totalEnergies.access_factures()
-            totalEnergies.download_factures()
-            return render(request, 'scraping/succes.html')
-    else :
-        form = LoginForm()
-    return render(request, 'scraping/launcher.html', {'form': form})
-
 
 class UserView(APIView) :
 
