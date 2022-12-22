@@ -65,7 +65,8 @@ class FournisseurTotalEnergies:
             button_factures = browser.find_element("xpath", '//*[@id="header"]/div[4]/div/ul/li[2]/a')
             button_factures.click()
         except Exception as e:
-            print(e)
+            browser.quit()
+            print(str(e))
 
     def download_factures():
         try:
@@ -75,6 +76,7 @@ class FournisseurTotalEnergies:
             local_pages = int(nb_pages.text)
             print("Nombre de pages détectées : ", str(local_pages))
         except Exception as e:
+            browser.quit()
             print(str(e))
             return False
 
@@ -92,8 +94,10 @@ class FournisseurTotalEnergies:
                 next_button.click()
                 return True
         except Exception as e:
-            print("Erreur2")
+            browser.quit()
+            print(str(e))
             return False
+        browser.quit()
         return True
 
     def decoupage(user, processId):
