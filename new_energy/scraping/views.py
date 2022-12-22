@@ -1,9 +1,7 @@
-from django.shortcuts import render
 import os
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from scraping.forms import LoginForm
 from scraping.services.fournisseurs.totalenergies import FournisseurTotalEnergies as totalEnergies
 from scraping.services.constantes.constantes import Constantes as const
 from scraping.models import User
